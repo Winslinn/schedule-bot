@@ -5,4 +5,4 @@ app = Flask(__name__)
 
 @app.route('/employees', methods=['GET'])
 def handle():
-    print("handle")
+    return 'Test'
