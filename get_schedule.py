@@ -5,25 +5,25 @@ from datetime import date
 
 import glob
 import os
-import urllib.request
+import requests
 
-jpg_files = glob.glob(f'schedule/**/*.jpg', recursive=True)
+image_files = glob.glob(f'schedule/*', recursive=True)
 
 schedule_URL = 'https://rfc.nubip.edu.ua/to-a-student/changes-to-the-schedule/'
 user_headers = headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0'}
-
-html = Request(schedule_URL, headers=user_headers)
-soup = BeautifulSoup(urlopen(html), 'html.parser')
 
 #soup = BeautifulSoup(open('page.html', encoding='utf-8'), 'html.parser')
 
 day = str(date.today()).split('-')[2]
 
-if len(jpg_files) > 0:
-    for file in jpg_files:
+if len(image_files) > 0:
+    for file in image_files:
         print(f'Delete {file} completed.')
         os.remove(file)
 else:
+    html = Request(schedule_URL, headers=user_headers)
+    soup = BeautifulSoup(urlopen(html), 'html.parser')
+    
     figure_list = soup.find_all('figure')
     
     for element in figure_list:
@@ -36,5 +36,11 @@ else:
             image_src = element.find('img')['data-src']
             
             if change_day > day:
-                print(image_src)
-                image_content = urllib.request.urlretrieve(image_src, f'schedule/{change_day}.webp')
+                image_content = requests.get(image_src, headers=user_headers).content
+                image_path = 'schedule/{change_day}'
+                
+                with open(os.path.join('schedule/', f'{change_day}.webp'), 'wb') as f:
+                    f.write(image_content)
+                
+                image_content = Image.open(f'{image_path}.webp').convert('RGB')
+                image_content.save(f'{image_path}.jpg', 'jpg')
