@@ -3,6 +3,6 @@ from PIL import Image
 
 app = Flask(__name__)
 
-@app.route('/employees', methods=['GET'])
+@app.route('/', methods=['GET'])
 def handle():
     return 'test'
