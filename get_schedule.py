@@ -4,6 +4,8 @@ from urllib.request import Request, urlopen
 
 import glob
 import os
+import base64
+import urllib
 
 scd_path = '/home/Winslinn/mysite/schedule'
 jpg_files = glob.glob(f'{scd_path}/**/*.jpg', recursive=True)
@@ -18,5 +20,5 @@ if len(jpg_files) > 0:
         print(f'Delete {file}')
         os.remove(file)
 else:
-    print(soup.find('img', class_='stk-img wp-image-7649', attrs={"name": "data-src"}))
-    print('hello')
+    url = soup.find('img', class_='stk-img wp-image-7649')['data-src']
+    print(url)
