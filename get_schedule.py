@@ -2,10 +2,12 @@ from PIL import Image
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 from datetime import date
+from io import BytesIO
 
 import glob
 import os
 import requests
+import easyocr
 
 image_files = glob.glob(f'schedule/*', recursive=True)
 
@@ -44,3 +46,15 @@ else:
                 
                 image_content = Image.open(f'{image_path}.webp').convert('RGB')
                 image_content.save(f'{image_path}.jpg', 'jpg')
+                
+                width, height = image_content.size
+                image_content = image_content.crop((135, 0, width/2, height))
+
+                img_bytes = BytesIO()
+                image_content.save(img_bytes, format='JPEG')
+                img_bytes = img_bytes.getvalue()
+
+                reader = easyocr.Reader(['uk'])
+                text = reader.readtext(img_bytes, detail=0)
+
+                print(text)
