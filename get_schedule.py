@@ -53,5 +53,5 @@ for element in figure_list:
             reader = easyocr.Reader(['uk'])
             text = reader.readtext(img_bytes, detail=0)
 
-            with open(os.path.join('schedule/', 'text.txt'), 'wb') as f:
-                f.write('\n'.join(text).encode('utf-8'))
+            with open(os.path.join('schedule/', 'changes_to_schedule.txt'), 'wb') as f:
+                f.write('\n'.join(text).lower().encode('utf-8'))
