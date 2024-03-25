@@ -161,3 +161,6 @@ cython_debug/
 page.html
 tempCodeRunnerFile.py
 schedule/
+
+.vercel
+.gitignore
