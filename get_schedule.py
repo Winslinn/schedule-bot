@@ -35,7 +35,7 @@ for element in figure_list:
         
         #image_src = element.find('img')['src']
         image_src = element.find('img')['data-src']
-            
+        
         if change_day >= day:
             image_content = requests.get(image_src, headers=user_headers).content
             image_path = f'schedule/{change_day}'
