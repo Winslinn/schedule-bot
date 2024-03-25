@@ -21,6 +21,7 @@ day = str(date.today()).split('-')[2]
 for file in image_files:
     print(f'Delete {file} completed.')
     os.remove(file)
+
 html = Request(schedule_URL, headers=user_headers)
 soup = BeautifulSoup(urlopen(html), 'html.parser')
     
@@ -39,10 +40,7 @@ for element in figure_list:
             image_content = requests.get(image_src, headers=user_headers).content
             image_path = f'schedule/{change_day}'
                 
-            with open(os.path.join('schedule/', f'{change_day}.webp'), 'wb') as f:
-                f.write(image_content)
-                
-            image_content = Image.open(f'{image_path}.webp').convert('RGB')
+            image_content = Image.open(BytesIO(image_content)).convert('RGB')
             image_content.save(f'{image_path}.jpg', 'jpeg')
                 
             width, height = image_content.size
@@ -55,4 +53,5 @@ for element in figure_list:
             reader = easyocr.Reader(['uk'])
             text = reader.readtext(img_bytes, detail=0)
 
-            print(text)
+            with open(os.path.join('schedule/', 'text.txt'), 'wb') as f:
+                f.write('\n'.join(text).encode('utf-8'))
